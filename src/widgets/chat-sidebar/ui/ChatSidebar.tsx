@@ -42,7 +42,7 @@ const StatusLine = ({
  */
 const receiveStatusText = (receiveStatus: ReceiveStatus): string => {
   if (receiveStatus.state === 'error') {
-    return `Приём: ${receiveStatus.error || 'ошибка'}`;
+    return receiveStatus.error || 'Ошибка приёма сообщений';
   }
 
   const webhook = receiveStatus.lastWebhookType
@@ -51,7 +51,7 @@ const receiveStatusText = (receiveStatus: ReceiveStatus): string => {
   const preview = receiveStatus.lastIncomingPreview
     ? ` ← ${receiveStatus.lastIncomingPreview}`
     : '';
-  return `Приём: слушаю${webhook}${preview}`;
+  return `Приём сообщений: слушаю${webhook}${preview}`;
 };
 
 /** Сайдбар со списком чатов и формой нового чата */

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Chat } from '@/entities/chat';
 import type { SessionCredentials } from '@/entities/session';
 import { enableIncomingNotifications, getChats } from '@/shared/api/green-api';
-import { sleep, withRateLimitRetry } from '@/shared/lib';
+import { sleep, toUserErrorMessage, withRateLimitRetry } from '@/shared/lib';
 
 type UseLoadChatsParams = {
   credentials: SessionCredentials;
@@ -64,14 +64,8 @@ const ensureIncomingEnabled = async ({
 /**
  * Человекочитаемая ошибка загрузки.
  */
-const toLoadErrorMessage = (err: unknown): string => {
-  const message =
-    err instanceof Error ? err.message : 'Не удалось загрузить чаты';
-  if (message.includes('429') || message.toLowerCase().includes('rate')) {
-    return 'Слишком много запросов (429). Подождите 10–20 секунд и обновите страницу.';
-  }
-  return message;
-};
+const toLoadErrorMessage = (err: unknown): string =>
+  toUserErrorMessage(err, 'Не удалось загрузить чаты');
 
 /**
  * При входе включает incomingWebhook и подтягивает чаты с retry на 429.

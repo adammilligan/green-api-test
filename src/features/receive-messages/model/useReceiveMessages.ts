@@ -13,7 +13,7 @@ import {
   RECEIVE_RETRY_DELAY_MS,
   RECEIVE_TIMEOUT_SEC
 } from '@/shared/config/greenApi';
-import { GreenApiHttpError, sleep } from '@/shared/lib';
+import { GreenApiHttpError, sleep, toUserErrorMessage } from '@/shared/lib';
 
 import {
   type IncomingPayload,
@@ -49,21 +49,8 @@ const isSoftReceiveError = (err: unknown): boolean =>
 /**
  * Текст ошибки приёма.
  */
-const toReceiveError = (err: unknown): string => {
-  if (err instanceof GreenApiHttpError && err.status === 429) {
-    return '429 лимит — жду';
-  }
-  if (err instanceof GreenApiHttpError && err.status === 401) {
-    return 'очередь занята — ответы идут через журнал';
-  }
-  if (err instanceof GreenApiHttpError) {
-    return `${err.status}: ${err.message.slice(0, 120)}`;
-  }
-  if (err instanceof Error) {
-    return err.message;
-  }
-  return 'Ошибка получения';
-};
+const toReceiveError = (err: unknown): string =>
+  toUserErrorMessage(err, 'Не удалось получить сообщения');
 
 /**
  * Журнал + long-poll. Журнал — основной способ показать ответы в UI.

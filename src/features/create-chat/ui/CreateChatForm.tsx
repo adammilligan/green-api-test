@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 import type { Chat } from '@/entities/chat';
 import type { SessionCredentials } from '@/entities/session';
 import { checkAccount } from '@/shared/api/green-api';
-import { normalizePhone } from '@/shared/lib';
+import { normalizePhone, toUserErrorMessage } from '@/shared/lib';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { Spinner } from '@/shared/ui/Spinner';
@@ -56,9 +56,7 @@ export const CreateChatForm = ({
       });
       setPhone('');
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Ошибка создания чата';
-      setError(message);
+      setError(toUserErrorMessage(err, 'Не удалось создать чат'));
     } finally {
       setIsLoading(false);
     }

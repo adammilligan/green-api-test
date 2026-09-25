@@ -3,6 +3,7 @@ import { FormEvent, KeyboardEvent, useState } from 'react';
 import type { ChatMessage } from '@/entities/message';
 import type { SessionCredentials } from '@/entities/session';
 import { sendMessage } from '@/shared/api/green-api';
+import { toUserErrorMessage } from '@/shared/lib';
 import { Button } from '@/shared/ui/Button';
 import { Spinner } from '@/shared/ui/Spinner';
 
@@ -53,8 +54,7 @@ export const MessageComposer = ({
       });
       setText('');
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Не удалось отправить';
-      setError(msg);
+      setError(toUserErrorMessage(err, 'Не удалось отправить сообщение'));
     } finally {
       setIsSending(false);
     }

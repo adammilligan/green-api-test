@@ -1,3 +1,4 @@
+export { toUserErrorMessage } from './errors';
 export {
   GreenApiHttpError,
   isRateLimitError,
