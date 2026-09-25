@@ -52,7 +52,7 @@ export const CreateChatForm = ({
       onCreated({
         chatId: result.chatId,
         phone: normalized,
-        title: result.username || normalized
+        name: result.username || normalized
       });
       setPhone('');
     } catch (err) {

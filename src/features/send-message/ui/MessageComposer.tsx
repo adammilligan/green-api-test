@@ -1,4 +1,10 @@
-import { FormEvent, KeyboardEvent, useState } from 'react';
+import {
+  FormEvent,
+  KeyboardEvent,
+  useLayoutEffect,
+  useRef,
+  useState
+} from 'react';
 
 import type { ChatMessage } from '@/entities/message';
 import type { SessionCredentials } from '@/entities/session';
@@ -8,6 +14,8 @@ import { Button } from '@/shared/ui/Button';
 import { Spinner } from '@/shared/ui/Spinner';
 
 import styles from './MessageComposer.module.css';
+
+const TEXTAREA_MAX_HEIGHT_PX = 160;
 
 type MessageComposerProps = {
   credentials: SessionCredentials;
@@ -24,6 +32,19 @@ export const MessageComposer = ({
   const [text, setText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  /**
+   * Растягивает поле ввода по содержимому (вверх до max-height).
+   */
+  useLayoutEffect(() => {
+    const el = textareaRef.current;
+    if (!el) {
+      return;
+    }
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, TEXTAREA_MAX_HEIGHT_PX)}px`;
+  }, [text]);
 
   /**
    * Отправляет сообщение через SendMessage.
@@ -87,6 +108,7 @@ export const MessageComposer = ({
           onChange={event => setText(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder='Введите сообщение'
+          ref={textareaRef}
           rows={1}
           value={text}
         />

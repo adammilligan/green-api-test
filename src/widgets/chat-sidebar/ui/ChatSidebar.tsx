@@ -96,8 +96,10 @@ export const ChatSidebar = ({
             onClick={() => onSelectChat(chat.chatId)}
             type='button'
           >
-            <span className={styles.title}>{chat.title}</span>
-            <span className={styles.subtitle}>{chat.phone || chat.chatId}</span>
+            <span className={styles.title}>{chat.name}</span>
+            {chat.phone ? (
+              <span className={styles.subtitle}>{chat.phone}</span>
+            ) : null}
           </button>
         ))
       )}

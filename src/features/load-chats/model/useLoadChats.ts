@@ -30,7 +30,7 @@ const mapChats = (remoteChats: Awaited<ReturnType<typeof getChats>>): Chat[] =>
         chat.phoneNumber && chat.phoneNumber > 0
           ? String(chat.phoneNumber)
           : '',
-      title: chat.name || chat.username || chat.chatId
+      name: chat.name || chat.username || chat.chatId
     }));
 
 /**

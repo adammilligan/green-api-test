@@ -39,8 +39,8 @@ export const ChatPanel = ({
   return (
     <section className={styles.panel}>
       <header className={styles.header}>
-        <h2 className={styles.title}>{chat.title}</h2>
-        <p className={styles.subtitle}>{chat.phone || chat.chatId}</p>
+        <h2 className={styles.title}>{chat.name}</h2>
+        {chat.phone ? <p className={styles.subtitle}>{chat.phone}</p> : null}
       </header>
       <div className={styles.messages}>
         {messages.length === 0 ? (

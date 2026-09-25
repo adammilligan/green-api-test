@@ -1,6 +1,10 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { type Chat, resolveExistingChatId } from '@/entities/chat';
+import {
+  type Chat,
+  pickBetterChatName,
+  resolveExistingChatId
+} from '@/entities/chat';
 import {
   type ChatMessage,
   type OutgoingMessageStatus,
@@ -91,7 +95,21 @@ export const ChatPage = ({ credentials, onLogout }: ChatPageProps) => {
       const byId = new Map(prev.map(chat => [chat.chatId, chat]));
       loaded.forEach(chat => {
         const existing = byId.get(chat.chatId);
-        byId.set(chat.chatId, existing ? { ...existing, ...chat } : chat);
+        if (!existing) {
+          byId.set(chat.chatId, chat);
+          return;
+        }
+        byId.set(chat.chatId, {
+          ...existing,
+          ...chat,
+          name: pickBetterChatName({
+            candidate: chat.name,
+            current: existing.name,
+            chatId: chat.chatId,
+            phone: chat.phone || existing.phone
+          }),
+          phone: chat.phone || existing.phone
+        });
       });
       return Array.from(byId.values());
     });
@@ -116,7 +134,12 @@ export const ChatPage = ({ credentials, onLogout }: ChatPageProps) => {
         item.chatId === chat.chatId
           ? {
               ...item,
-              title: chat.title || item.title,
+              name: pickBetterChatName({
+                candidate: chat.name,
+                current: item.name,
+                chatId: chat.chatId,
+                phone: chat.phone || item.phone
+              }),
               phone: chat.phone || item.phone
             }
           : item
@@ -203,7 +226,7 @@ export const ChatPage = ({ credentials, onLogout }: ChatPageProps) => {
       chatPatch
     }: {
       message: ChatMessage;
-      chatPatch: Pick<Chat, 'chatId' | 'title'> & { phone?: string };
+      chatPatch: Pick<Chat, 'chatId' | 'name'> & { phone?: string };
     }) => {
       const canonicalChatId = resolveExistingChatId({
         chats: chatsRef.current,
@@ -217,7 +240,7 @@ export const ChatPage = ({ credentials, onLogout }: ChatPageProps) => {
       upsertChat(
         {
           chatId: canonicalChatId,
-          title: chatPatch.title,
+          name: chatPatch.name,
           phone: chatPatch.phone ?? ''
         },
         shouldSelect

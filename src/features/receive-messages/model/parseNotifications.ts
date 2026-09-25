@@ -12,7 +12,7 @@ import { normalizePhone } from '@/shared/lib';
 
 export type IncomingPayload = {
   message: ChatMessage;
-  chatPatch: Pick<Chat, 'chatId' | 'title'> & { phone?: string };
+  chatPatch: Pick<Chat, 'chatId' | 'name'> & { phone?: string };
 };
 
 export type MessageStatusPayload = {
@@ -22,9 +22,9 @@ export type MessageStatusPayload = {
 };
 
 /**
- * Собирает title чата.
+ * Собирает имя чата.
  */
-const resolveChatTitle = ({
+const resolveChatName = ({
   chatId,
   chatName,
   senderName,
@@ -118,7 +118,7 @@ export const parseIncomingWebhook = (
     },
     chatPatch: {
       chatId,
-      title: resolveChatTitle({
+      name: resolveChatName({
         chatId,
         chatName,
         senderName: senderName || senderContactName,
@@ -179,7 +179,7 @@ export const parseJournalItem = (
     },
     chatPatch: {
       chatId: item.chatId,
-      title: item.senderName || item.chatId
+      name: item.senderName || item.chatId
     }
   };
 };
