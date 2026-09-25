@@ -11,3 +11,8 @@ React-интерфейс для отправки и получения текс�
 3. Открыть http://localhost:3100
 
 На странице входа указать `idInstance` и `apiTokenInstance` из кабинета GREEN-API.
+
+## Демо
+
+https://adammilligan.github.io/green-api-test/
+

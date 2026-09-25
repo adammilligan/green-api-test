@@ -7,7 +7,8 @@ import { defineConfig } from 'vite';
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 /** Конфиг Vite: алиас @ (API зовём напрямую — у GREEN-API CORS *) */
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  base: mode === 'production' ? '/green-api-test/' : '/',
   plugins: [react()],
   resolve: {
     alias: {
@@ -18,4 +19,4 @@ export default defineConfig({
     host: true,
     port: 3100
   }
-});
+}));
