@@ -1,0 +1,30 @@
+.mark {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.check {
+  display: inline-block;
+}
+
+.checkOverlap {
+  display: inline-block;
+  margin-left: -7px;
+}
+
+.read {
+  opacity: 1;
+  color: #b7e0ff;
+}
+
+.failed {
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffd4d4;
+}
